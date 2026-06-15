@@ -9,11 +9,6 @@ const productSchema = new mongoose.Schema({
         type: String,
         required:[true,"Desc is required"],
     },
-    qty:{
-        type: Number ,
-        required:[true,"qty is required"],
-        default: 1,
-    },
     category:{
         type: String,
         required:[true,"category is required"],

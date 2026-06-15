@@ -24,6 +24,11 @@ const userSchema = new mongoose.Schema({
         required:[true,"password is required"]
 
     },
+    role:{
+        type:String,
+        enum:["user","vendor"],
+        default:"user"
+    },
     refreshToken: {
       type: String,
       default: ''

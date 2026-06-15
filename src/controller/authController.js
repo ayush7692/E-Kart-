@@ -151,7 +151,7 @@ const logOut = async(req,res)=>{
         res.status(404)
         throw new Error("user is missing")
     }
-    const refreshToken = await User.findByIdAndUpdate({user:user._id},{
+    const eraseToken = await User.findByIdAndUpdate({user:user._id},{
         refreshToken:""
     },{new:true})
     

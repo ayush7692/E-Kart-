@@ -3,12 +3,21 @@ const User = require("./usermodel");
 
 
 const vendorSchema = new mongoose.Schema({
+    user:{
+        type:mongoose.Schema.Types.ObjectId,
+        required:true,
+        ref:"User"
+    },
     companyName:{
         type: String,
-        required:[true,"name is required"],
-        maxLength:25,
+        unique:true,
+        required:[true,"company name is required"],
     },
-    email:{
+    ownerName:{
+        type: String,
+        required:[true,"owner name is required"],
+    },
+    contactEmail:{
         type: String,
         unique: true,
         required:[true,"email is required"],
@@ -18,12 +27,6 @@ const vendorSchema = new mongoose.Schema({
         type: Number,
         unique: true,
         spare: true
-    },
-    password:{
-        type : String,
-        trim : true,
-        required:[true,"password is required"]
-
     },
     isActive:{
         type:Boolean,
