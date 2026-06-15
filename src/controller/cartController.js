@@ -1,0 +1,107 @@
+const Cart = require("../model/cartmodel")
+const Product = require("../model/productmodel")
+
+const getCart = async(req,res)=>{
+
+    const userId = req.user._id
+
+    const cart = await Cart.findOne({user:userId}).populate("products.product" ,"-stock")
+
+    if(!cart){
+       res.status(200).json({
+        product:[]
+       })
+    }
+    res.status(200).json(cart)
+
+}
+
+const addToCart = async(req,res)=>{
+    const userId = req.user._id
+    const {productId,qty} = req.body
+    const intQty = parseInt(qty)
+
+    if(!productId||!intQty){
+        res.status(400)
+        throw new Error('Provide product and qty')
+    }
+
+    const productExist = await Product.findById(productId)
+    if(!productExist){
+        res.status(404)
+        throw new Error('product not available')
+    }
+
+   
+    // create new Cart
+    let cart = await Cart.findOne({user:userId})
+    if(!cart){
+
+         if (intQty > productExist.stock) {
+           res.status(400)
+           throw new Error("stock is unavailable");
+         }
+
+        cart = await Cart.create({
+            user:userId,
+            products :[{product:productId, qty:intQty}]
+        })
+    }else{
+      let existingCart = cart.products.find(
+        (item) => item.product.toString() == productId,
+      );
+
+        console.log(existingCart)
+      if (existingCart) {
+        const newQty = existingCart.qty + intQty;
+
+        if(newQty > productExist.stock) {
+          res.status(400)
+          throw new Error("insufficient stock");
+        }
+
+        existingCart.qty = newQty;
+      }else{
+        if(intQty>productExist.stock){
+            res.status(400)
+            throw new Error('insufficient Stock')
+        }
+        cart.products.push[{product:productId, qty:intQty}]
+
+      }
+        await cart.save()
+    }
+
+    await cart.populate('products.product')
+
+    res.status(200).json(cart)
+}
+
+
+
+const clearCart =  async(req,res)=>{
+    const userId = req.user._id
+    
+    const cart = await Cart.findOneAndDelete({user:userId})
+
+    if(!cart){
+        res.status(404)
+        throw new Error('cart is found')
+    }
+    
+    res.status(200).json({
+        message:"cart cleared"
+    })
+}
+
+const updateCart =  async(req,res)=>{
+    const userId = req.user._id
+    res.send("update to cart ")
+}
+const removeCartItem =  async(req,res)=>{
+    const userId = req.user._id
+    res.send("update to cart ")}
+
+module.exports = {getCart,addToCart,updateCart,clearCart,removeCartItem}
+
+

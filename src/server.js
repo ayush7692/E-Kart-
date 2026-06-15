@@ -18,6 +18,8 @@ const authrouter = require('./routes/authRoutes')
 const productrouter = require('./routes/productRoutes')
 const vendorRouter = require('./routes/vendorRoutes')
 const userRouter = require('./routes/userRoutes')
+const cartRouter = require('./routes/cartRoutes')
+const orderRouter = require('./routes/orderRoutes')
 
 
 
@@ -27,6 +29,8 @@ app.use('/api/auth',authrouter)
 app.use('/api/products',productrouter)
 app.use('/api/vendor',vendorRouter)
 app.use('/api/user',userRouter)
+app.use('/api/cart',cartRouter)
+app.use('/api/order',orderRouter)
 
 
 

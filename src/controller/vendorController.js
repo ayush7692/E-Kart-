@@ -1,3 +1,4 @@
+const Product = require("../model/productmodel");
 const Vendor = require("../model/vendorModel");
 
 const becomeVendor = async(req,res)=>{
@@ -48,28 +49,73 @@ const becomeVendor = async(req,res)=>{
     }
 }
 
-
-const getMyProducts = async(req,res)=>{
-    res.send("getMy product")
-}
-const getMyProduct = async(req,res)=>{
-    res.send("getMy product")
-}
-
-
 const addProduct = async(req,res)=>{
-    res.send("add product")
+
+    const {name,description,category,stock} = req.body
+    const vendorId = req.vendor._id
+
+    if(!name ||!description || !category || !stock ){
+        res.status(400)
+        throw new Error(" Fill all the detail ") }
+
+    const product = await Product.create({
+        name,
+        description,
+        category,
+        stock
+    })  
+    
+    if(!addProduct){
+        res.status(409)
+        throw new Error("product not added")
+    }
+
+    res.status(201).json({
+        name:product.name,
+        description: product.description,
+        category:product.category,
+        stock:product.stock,
+        createdAt: product.createdAt
+    })
 }
 
 const updateProduct = async(req,res)=>{
-    res.send("update product")
+    const {name,description,category,stock} = req.body
+    const vendorId = req.vendor._id
+    const productId = req.params.pid
+
+    const allowedField = ["name","description","category","stock"]  
+
+    if(!allowedField.includes(req.body)){
+        res.status(409)
+        throw new Error("Entry not allowed")
+    }
+
+    const productExist = await Product.findById(productId)
+    if(!productExist){
+        res.status(404)
+        throw new Error("product not found")
+    }
+
+    const updatedProduct = await Product.findByIdAndUpdate(productId,
+       { $set:{name,description,category,stock}},
+        {new:true}
+    )
+    if(!updateProduct){
+        res.status(401)   
+        throw new Error("product not update")
+    }
+    res.status(201).json({
+        name:updatedProduct.name,
+        description:updatedProduct.description,
+        category:updatedProduct.category,
+        stock:updatedProduct.stock
+    })
+
 }
 
-const getVendors =  async(req,res)=>{
-    res.send("get vendor")
-}
 
 
-module.exports = {getMyProducts,getMyProduct,addProduct,updateProduct,getVendors,becomeVendor}
+module.exports = {addProduct,updateProduct,becomeVendor}
 
 // getMyOrder,getUserOrder,updateOrder
