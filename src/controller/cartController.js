@@ -129,53 +129,6 @@ const updateCart =  async(req,res)=>{
 
 }
 
-// const updateCart = async (req, res) => {
-//       const { product, qty } = req.body
-//       const userId = req.user._id
-
-//     if ( qty<1 || !product  ) {
-//         res.status(409)
-//         throw new Error("Please Enter Qty and product")
-//     }
-
-//     const productExist = await Product.findById(product)
-
-//     if(qty> productExist.stock){
-//         res.status(409)
-//         throw new Error("Stock not available")
-//     }
-
-//     const cart = await Cart.findOne({user:userId})
-
-//     if(!cart){
-//         res.status(404)
-//         throw new Error("No cart found")
-//     }
-
-//     const productIndex = cart.products.findIndex((item)=>{
-//         return item.product.toString() === product
-//     })
-        
-//     if(productIndex === -1){
-//         throw new Error("please add product in cart first")
-
-//     }
-
-//          cart.products[productIndex].qty = parseInt(qty)
-
-        
-//         if(cart.products[productIndex].qty> productExist.stock){
-//             res.status(409)
-//             throw new Error("limit exceed")
-//         }
-    
-
-//     await cart.save()
-
-//     await cart.populate('products.product')
-
-//     res.json(cart)
-// }
 
 const removeCartItem =  async(req,res)=>{
     const userId = req.user._id
