@@ -12,14 +12,17 @@ const addressShema = new mongoose.Schema({
     name:{
         type : String,
         required: true,
+        tirm: true
     },
     street:{
         type : String,
-        required: true
+        required: true,
+        trim: true
     },
     city:{
         type : String,
-        required: true
+        required: true,
+        trim: true
     },
     pinCode:{
         type : Number,
@@ -27,7 +30,8 @@ const addressShema = new mongoose.Schema({
     },
     country:{
         type : String,
-        required: true
+        required: true,
+        default: "India"
     }
 },{
     timestamps:true

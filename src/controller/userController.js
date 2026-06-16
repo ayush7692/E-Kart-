@@ -1,12 +1,14 @@
 const Address = require("../model/adressmodel")
+const User = require("../model/usermodel")
 
 
 
 
 const updateMyAddress = async(req,res)=>{
-    const {name,steet,city,pinCode,country} = req.body
+    const {name,street,city,pinCode,country} = req.body
+    const aid = req.params.aid
     const userId = req.user
-    console.log(req.body)
+    
     if(pinCode.length>6){
         throw new Error('Pincode cant be more than 6 digit')
     }
@@ -16,12 +18,12 @@ const updateMyAddress = async(req,res)=>{
         res.status(404)
         throw new Error('luser not found')
     }
-    console.log(user)
-    const updatedAddress = await Address.findByIdAndUpdate(user._id,{
-        name,
-        street,
-        city,
-        pinCode,
+
+    const updatedAddress = await Address.findByIdAndUpdate(aid,{
+        name:name,
+        street:street,
+        city:city,
+        pinCode:pinCode,
         country
     })
     if(!updatedAddress){
@@ -38,7 +40,7 @@ const addAddress = async(req,res)=>{
     const {name,street,city,pinCode,country} = req.body
     const userId = req.user
 
-    if(!name||!street||!city||!pinCode||!country){
+    if(!name||!street||!city||!pinCode){
         res.status(401)
         throw new Error("Fill all the detail")
     }
