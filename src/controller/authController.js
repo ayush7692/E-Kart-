@@ -7,15 +7,17 @@ const { generateRefreshToken, generateAccessToken } = require("../utils/token");
 
 const userRegister = async(req,res)=>{
 
-    const {name,email,phone,password,role}= req.body
+    const {fullName,email,phone,password,role}= req.body
+
+    console.log(req.body)
 
     const nameRegex = /^[a-zA-Z]+(?:\s[a-zA-Z]+)*$/;
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-    if(!name || !email || !phone || !password){
+    if(!fullName || !email || !phone || !password){
         res.status(400)
         throw new Error(" Fill all the detail ") 
-    }else if(!nameRegex.test(name)){
+    }else if(!nameRegex.test(fullName)){
         throw new Error("Don't use special character or number in name ")
     }else if (!emailRegex.test(email)){
         throw new Error("Provide a valide email id")
@@ -35,7 +37,7 @@ const userRegister = async(req,res)=>{
 
 
     const user = await User.create({
-        name,
+        fullName,
         email,
         phone,
         password : hashedPassword,
@@ -52,7 +54,7 @@ const userRegister = async(req,res)=>{
 
         res.status(201).json({
         userId : user._id,
-        name:user.name,
+        name:user.fullName,
         phone: user.phone,
         email: user.email,
         role: user.role,
@@ -62,7 +64,7 @@ const userRegister = async(req,res)=>{
         
     })
     }else{
-        res.status(400)
+        res.status(401)
         throw new Error("Ivalid user data ")
     }
 }

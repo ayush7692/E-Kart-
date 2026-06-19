@@ -93,10 +93,9 @@ const clearCart =  async(req,res)=>{
     })
 }
 
-const updateCart =  async(req,res)=>{
+const increaseItem =  async(req,res)=>{
     const userId = req.user._id
-    const {productId,qty} = req.body
-    const intQty = parseInt(qty)
+    const {productId} = req.body
    
     const cart = await Cart.findOne({user:userId})
     if(!cart){
@@ -110,15 +109,15 @@ const updateCart =  async(req,res)=>{
         throw new Error('product not available')
     }
     
-    let cartExist  = cart.products.find((item)=> item.product.toString()==productId)
+    let cartItem  = cart.products.find((item)=> item.product.toString()==productId)
 
-       if(cartExist){
-        if(productExist.stock < intQty){
+       if(cartItem){
+        if(productExist.stock < cartItem +1 ){
             res.status(409)
             throw new Error('insufficient stock')
         }
 
-         cartExist.qty = intQty
+         cartItem.qty += 1
 
        }
 
@@ -129,6 +128,40 @@ const updateCart =  async(req,res)=>{
 
 }
 
+const decreaseItem =  async(req,res)=>{
+    const userId = req.user._id
+    const {productId} = req.body
+   
+    const cart = await Cart.findOne({user:userId})
+    if(!cart){
+        res.status(400)
+        throw new Error('cart not found')
+    }
+
+    const productExist = await Product.findById(productId)
+    if(!productExist){
+        res.status(400)
+        throw new Error('product not available')
+    }
+    
+    let cartItem  = cart.products.find((item)=> item.product.toString()==productId)
+
+       if(cartItem){
+        if(!productExist.stock){
+            res.status(409)
+            throw new Error('insufficient stock')
+        }
+
+         cartItem.qty -= 1
+
+       }
+
+        await cart.save()
+        await cart.populate('products.product','-stock')
+
+      res.status(200).json(cart)
+
+}
 
 const removeCartItem =  async(req,res)=>{
     const userId = req.user._id
@@ -148,6 +181,6 @@ const removeCartItem =  async(req,res)=>{
 
 }
 
-module.exports = {getCart,addToCart,updateCart,clearCart,removeCartItem}
+module.exports = {getCart,addToCart,increaseItem,decreaseItem,clearCart,removeCartItem}
 
 

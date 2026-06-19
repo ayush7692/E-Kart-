@@ -2,7 +2,7 @@ const express = require('express')
 const { default: mongoose } = require('mongoose')
 
 const userSchema = new mongoose.Schema({
-    name:{
+    fullName:{
         type: String,
         required:[true,"name is required"],
         maxLength:25,
@@ -15,7 +15,6 @@ const userSchema = new mongoose.Schema({
     },
     phone:{
         type: Number,
-        unique: true,
         spare: true
     },
     password:{
