@@ -5,7 +5,7 @@ const getCart = async(req,res)=>{
 
     const userId = req.user._id
 
-    const cart = await Cart.findOne({user:userId}).populate("products.product" ,"-stock")
+    const cart = await Cart.findOne({user:userId}).populate("products.product")
 
     if(!cart){
        res.status(404)
@@ -93,7 +93,7 @@ const clearCart =  async(req,res)=>{
 }
 
 const increaseItem =  async(req,res)=>{
-    const userId = '6a33ecc11303f978c5962af2'
+    const userId = req.user._id
     const productId = req.params.pid
 
     console.log("contro",productId)
@@ -123,14 +123,14 @@ const increaseItem =  async(req,res)=>{
        }
 
         await cart.save()
-        await cart.populate('products.product','-stock')
+        await cart.populate('products.product')
 
       res.status(200).json(cart)
 
 }
 
 const decreaseItem =  async(req,res)=>{
-    const userId = '6a33ecc11303f978c5962af2'
+    const userId = req.user._id
     const productId = req.params.pid
    
     const cart = await Cart.findOne({user:userId})
@@ -158,14 +158,14 @@ const decreaseItem =  async(req,res)=>{
        }
 
         await cart.save()
-        await cart.populate('products.product','-stock')
+        await cart.populate('products.product')
 
       res.status(200).json(cart)
 
 }
 
 const removeCartItem =  async(req,res)=>{
-    const userId = '6a33ecc11303f978c5962af2'
+    const userId = req.user._id
     const productId = req.params.pid
    
     const cart = await Cart.findOne({user:userId})

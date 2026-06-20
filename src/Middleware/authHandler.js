@@ -3,33 +3,39 @@ const User = require("../model/usermodel")
 const Vendor = require("../model/vendorModel")
 
 
-const forUser = async(req,res,next)=>{
-    // console.log(req)
-    let token
+const forUser = async (req, res, next) => {
     try {
-        if(req.headers.authorization && req.headers.authorization.startsWith("Bearer")){
+        if (req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
+            const token = req.headers.authorization.split(' ')[1]
 
-            token = req.headers.authorization.split(' ')[1]
-            if (!token) {
-                throw new Error("token is unavailable")
+            if (!token || token === "undefined" || token === "null") {
+                return res.status(401).json({
+                  message: "Token is unavailable" 
+                })
             }
-            // console.log(token)
-            let decode = jwt.verify(token,process.env.SECRET_KEY)
-        
 
+            const decode = jwt.verify(token, process.env.SECRET_KEY)
             const user = await User.findById(decode.id)
-            // console.log(user)
-            if(!user){
-                throw new Error('user not found')
+
+            if (!user) {
+                return res.status(401).json({ 
+                    message: "User not found" 
+                })
             }
 
-            req.user  = user
-            next()
+            req.user = user
+            return next()
         }
 
+        return res.status(401).json({ 
+            message: "Unauthorized: no token provided" 
+        })
+
     } catch (error) {
-        res.status(401)
-        throw new Error("Unauthorise Access")
+        return res.status(401).json({ 
+            message: "Unauthorized access", 
+            error: error.message 
+        })
     }
 }
 

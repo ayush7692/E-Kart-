@@ -7,7 +7,7 @@ const User = require("../model/usermodel")
 const updateMyAddress = async(req,res)=>{
     const {name,street,city,pinCode,country} = req.body
     const aid = req.params.aid
-    const userId = req.user
+    const userId = req.user._id
     
     if(pinCode.length>6){
         throw new Error('Pincode cant be more than 6 digit')
@@ -38,7 +38,7 @@ const updateMyAddress = async(req,res)=>{
 const addAddress = async(req,res)=>{
 
     const {name,street,city,pinCode,country} = req.body
-    const userId = req.user
+    const userId = req.user._id
 
     if(!name||!street||!city||!pinCode){
         res.status(401)
@@ -71,7 +71,19 @@ const addAddress = async(req,res)=>{
         address
     })
 }
+const getAddress = async(req,res)=>{
+    const userId = '6a33ecc11303f978c5962af2'
+
+    const myAddress = await Address.find({user:userId})
+    if(myAddress.length==0){
+        res.status(404)
+        throw new Error('first add Address')
+    }
+
+    res.status(200).json(myAddress)
+
+}
 
 
 
-module.exports = {addAddress,updateMyAddress}
+module.exports = {addAddress,updateMyAddress,getAddress}

@@ -28,10 +28,29 @@ const addressShema = new mongoose.Schema({
         type : Number,
         required: true
     },
+    phone:{
+        type : Number,
+        required: true
+    },
+    state:{
+        type : String,
+        required: true,
+        trim: true
+    },
+    email:{
+        type : String,
+        required: true,
+        tirm: true
+    },
     country:{
         type : String,
         required: true,
         default: "India"
+    },
+    default:{
+        type: Boolean,
+        required: true,
+        default: false
     }
 },{
     timestamps:true

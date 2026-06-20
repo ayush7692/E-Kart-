@@ -7,10 +7,10 @@ const router = express.Router()
 
 router.get('/',forUser,getCart)     
 router.post('/',forUser,addToCart)
-router.put('/increase/:pid',increaseItem)
-router.put('/decrease/:pid',decreaseItem)
-router.put('/remove/:pid',removeCartItem)
-router.delete('/',forUser,clearCart)
+router.put('/increase/:pid',forUser,increaseItem)
+router.put('/decrease/:pid',forUser,decreaseItem)
+router.put('/remove/:pid',forUser,removeCartItem)
+router.delete('/',clearCart)
 
 
 module.exports = router
