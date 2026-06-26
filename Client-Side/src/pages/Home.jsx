@@ -12,6 +12,8 @@ const Home = () => {
   const {user} = useSelector(store=> store.auth)
   const [options,setOptions] = useState("")
   const [sortData,setSortData] = useState("")
+  const [search,setSearch]= useState("")
+  const [input,setInput]=useState("")
   
     const image =  "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500"
 
@@ -33,9 +35,11 @@ const Home = () => {
       }else if(sortData=== false) {
           result = result.sort((a,b)=>b.price-a.price)
       }
-
+      if(search){
+        result = result.filter((item)=>item?.name?.toLowerCase().includes(search.toLowerCase()))
+      }
       return result
-  },[products,options,sortData])
+  },[products,options,sortData,search ])
 
 
   const handleClick = ()=>{
@@ -43,42 +47,65 @@ const Home = () => {
       setOptions("")
   }
 
+  const handleSearch =()=>{
+        setSearch(input)
+  }
+
   return (
     <div className="min-h-screen bg-blue-50">
       <div className="bg-white text-blue-800  py-4">
         <div className="max-w-7xl mx-auto px-4 text-center">
-          {user?.role==="vendor"?
-           <h1 className="text-4xl font-sm mb-1">Welcome to Vendor Dashboard</h1> :
+          {user?.role === "vendor" ? (
+            <h1 className="text-4xl font-sm mb-1">
+              Welcome to Vendor Dashboard
+            </h1>
+          ) : (
             <h1 className="text-4xl font-sm mb-1">Welcome to Ekart</h1>
-          }
+          )}
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-2 py-2">
-        <div className="  text-white  flex items-center gap-5 my-1">
-          <button
-            onClick={handleClick}
-            className=" bg-blue-50 p-0.5 rounded-md font-medium text-blue-800 transition hover:cursor-pointer"
-          >
-            Clear -
-          </button>
-          <button
-            onClick={() => setSortData((prev) => !prev)}
-            className=" bg-blue-600 p-0.5 rounded-md font-medium hover:bg-blue-900 transition hover:cursor-pointer"
-          >
-            Price - {sortData ? "high-low" :"low-high" }
-          </button>
-          <select
-            value={options}
-            onChange={(e) => setOptions(e.target.value)}
-            className=" bg-blue-600 p-0.5 rounded-md font-medium hover:bg-blue-900 transition hover:cursor-pointer"
-          >
-            <option value="" disabled className="hidden" >Category</option>
-            <option value="Mobile">Mobile</option>
-            <option value="Electronic">Electronic</option>
-            <option value="Fashion">Fashion</option>
-            <option value="Furniture">Furniture</option>
-          </select>
+        <div className="  text-white   my-1  md:flex justify-between ">
+          <div className="flex items-center gap-5">
+            <button
+              onClick={handleClick}
+              className=" bg-blue-50 p-0.5 rounded-md font-medium text-blue-800 transition hover:cursor-pointer"
+            >
+              Clear -
+            </button>
+            <button
+              onClick={() => setSortData((prev) => !prev)}
+              className=" bg-blue-600 p-0.5 rounded-md px-2 font-medium hover:bg-blue-900 transition hover:cursor-pointer"
+            >
+              Price - {sortData ? "high-low" : "low-high"}
+            </button>
+            <select
+              value={options}
+              onChange={(e) => setOptions(e.target.value)}
+              className=" bg-blue-600 p-0.5 rounded-md font-medium hover:bg-blue-900 transition hover:cursor-pointer"
+            >
+              <option value="" disabled className="hidden">
+                Category
+              </option>
+              <option value="Mobile">Mobile</option>
+              <option value="Electronic">Electronic</option>
+              <option value="Fashion">Fashion</option>
+              <option value="Furniture">Furniture</option>
+            </select>
+          </div>
+          <div>
+            <button onClick={handleSearch}  className=" bg-blue-600 p-0.5 px-2 mr-2 rounded-md font-medium hover:bg-blue-900 transition hover:cursor-pointer">
+              Search
+            </button>
+            <input
+              className="2rem border border-blue-200 text-black rounded-lg px-4  focus:outline-none focus:ring-1 focus:ring-blue-600"
+              type="text"
+              value={input}
+              placeholder="Enter Text"
+              onChange={(e) => setInput(e.target.value)}
+            />
+          </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -121,7 +148,7 @@ const Home = () => {
                   >
                     Add To Cart
                   </button>
-                </div> 
+                </div>
               </div>
             </div>
           ))}
