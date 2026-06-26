@@ -45,10 +45,12 @@ const Home = () => {
   const handleClick = ()=>{
       setSortData("")
       setOptions("")
+      setSearch("")
   }
 
   const handleSearch =()=>{
         setSearch(input)
+        setInput("")
   }
 
   return (
