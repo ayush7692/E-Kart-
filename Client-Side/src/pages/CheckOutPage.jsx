@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { getAddress } from "../features/slice/addressSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { createOrders } from "../features/slice/orderSlice";
+import { createOrders, orderComplete } from "../features/slice/orderSlice";
 import { Link, Links, useNavigate } from "react-router-dom";
 import toast, { Toaster } from 'react-hot-toast';
+import { clearCart } from "../features/slice/cartSlice";
 
 const Checkout = () => {
 
@@ -24,23 +25,33 @@ const Checkout = () => {
   useEffect(() => {
     if(!errorMessage){
       dispatch(getAddress());
-   } 
+   }
   },[errorMessage]);
   
-  const filteredData = address?.filter((item)=>item?.isDefault===true||item?.isDefault==="true" )
+const filteredData = address?.filter((item)=>item?.isDefault===true||item?.isDefault==="true" )
 
-  console.log(address)
 
 
   const handlePlaceOrder = () => {
-    if(filteredData?.length===0){
-      toast.error("Add Address first")
+    if (filteredData?.length === 0) {
+    return  toast.error("Add Address first");
     } 
-    dispatch(createOrders());
-    setTimeout(() => {
-      navigate("/order");
-    }, 5000);
+      dispatch(createOrders());
   };
+
+
+
+  useEffect(()=>{
+      if(orderConfirmed){
+        const timer = setTimeout(()=>{ 
+            dispatch(orderComplete())
+            dispatch(clearCart())
+            navigate('/order')
+        },2000)
+
+        return ()=> clearTimeout(timer)
+      }
+  },[orderConfirmed])
 
   return (
     <div className="min-h-screen bg-blue-50 py-8 px-4">
@@ -133,7 +144,7 @@ const Checkout = () => {
 
             <button
               onClick={handlePlaceOrder}
-              disabled={filteredData?.length===0}
+              // disabled={filteredData?.length===0}
               className="w-full mt-6 bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition hover:cursor-pointer"
             >
               Place Order
@@ -160,7 +171,7 @@ const Checkout = () => {
             </div>
 
           </div>
-        {orderConfirmed && (
+        {!orderConfirmed?"":(
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 animate-fade-in">
           <div className="bg-white rounded-2xl shadow-xl p-8 flex flex-col items-center gap-3 text-center">
             <div className="w-60 h-60 rounded-full bg-green-100 flex items-center justify-center">

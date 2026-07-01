@@ -27,13 +27,16 @@ const Navbar = () => {
         <div className="flex items-center gap-4">
           {user?.role==="user" ? (
             <>
-             
+              
               <Link to={`/cart`} className="px-4 py-2 rounded hover:bg-blue-700 transition">
                 Cart : {cartItem.length}
               </Link>
 
               <Link to={'/order'} className="px-4 py-2 rounded hover:bg-blue-700 transition">
                 Orders
+              </Link>
+              <Link to={`/profile`} className="px-4 py-2 rounded hover:bg-blue-700 transition">
+                profile
               </Link>
 
                <button onClick={()=>{dispatch(logout())}} className="flex bg-white text-blue-800 rounded-lg font-medium overflow-hidden px-4 py-2 rounded hover:bg-red-300 transition hover:cursor-pointer">
@@ -42,8 +45,11 @@ const Navbar = () => {
             </>
           ) : user?.role==="vendor" ?(
               <>
-                <Link to={'/addProduct'} className="px-4 py-2 rounded hover:bg-blue-700 transition">
+                <Link to={'/vendor/addProduct'} className="px-4 py-2 rounded hover:bg-blue-700 transition">
                 AddProduct
+              </Link>
+                <Link to={`/vendor/profile`} className="px-4 py-2 rounded hover:bg-blue-700 transition">
+                profile
               </Link>
                <button onClick={()=>{dispatch(logout())}} className="flex bg-white text-blue-800 rounded-lg font-medium overflow-hidden px-4 py-2 rounded hover:bg-red-300 transition hover:cursor-pointer">
                 Loguot

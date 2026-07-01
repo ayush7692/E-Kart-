@@ -10,7 +10,7 @@ router.post('/:pid',forUser,addToCart)
 router.put('/increase/:pid',forUser,increaseItem)
 router.put('/decrease/:pid',forUser,decreaseItem)
 router.put('/remove/:pid',forUser,removeCartItem)
-router.delete('/',clearCart)
+router.delete('/',forUser,clearCart)
 
 
 module.exports = router

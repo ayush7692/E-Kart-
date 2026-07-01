@@ -178,3 +178,23 @@ export const removeItem = createAsyncThunk('REMOVE/ITEM',async(id,thunkAPI)=>{
         return thunkAPI.rejectWithValue(message)
     }
 })
+
+export const clearCart = createAsyncThunk('REMOVE/CART',async(_,thunkAPI)=>{
+    try {
+        let token = thunkAPI.getState()?.auth?.user?.accessToken
+    
+        const response = await api.delete('/cart',{
+            headers:{
+                authorization: `Bearer ${token}`
+            }
+        })
+      
+        return response?.data
+        
+        
+    } catch (error) {
+        let message = error.response
+        console.log(message)
+        return thunkAPI.rejectWithValue(message)
+    }
+})

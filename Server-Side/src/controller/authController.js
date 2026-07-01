@@ -99,7 +99,7 @@ const userLogin = async(req,res)=>{
 
         res.status(201).json({
             userId : user._id,
-            name:user.name,
+            name:user.fullName,
             phone: user.phone,
             email: user.email,
             createdAt: user.createdAt,

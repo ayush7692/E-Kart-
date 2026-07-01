@@ -54,7 +54,7 @@ const Home = () => {
   }
 
   return (
-    <div className="min-h-screen bg-blue-50">
+    <div className="min-h-screen bg-blue-100">
       <div className="bg-white text-blue-800  py-4">
         <div className="max-w-7xl mx-auto px-4 text-center">
           {user?.role === "vendor" ? (
@@ -110,19 +110,19 @@ const Home = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {displayData?.map((product) => (
             <div
               key={product?._id}
-              className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition max-h-100"
+              className="bg-white max-w-[280px] rounded-xl shadow-md overflow-hidden hover:shadow-lg transition max-h-auto"
             >
               <img
                 src={product?.image ? product?.image : image}
                 alt={product?.name}
-                className="w-full h-35 object-cover"
+                className="w-full h-45 object-cover"
               />
 
-              <div className="p-4">
+              <div className="p-2 px-4">
                 <h3 className="text-xl font-semibold text-blue-800">
                   {product?.name}
                 </h3>
@@ -131,12 +131,13 @@ const Home = () => {
                   {product?.category}
                 </span>
 
-                <p className="text-gray-600 mt-3 text-sm">
+                <p className="text-gray-600 mt-3 text-sm truncate">
                   {product?.description}
                 </p>
 
                 <p className="text-gray-600 mt-3 text-sm">₹ {product?.price}</p>
 
+               {user?.role==="user"? ( 
                 <div className="flex items-center justify-between gap-1">
                   <Link
                     to={`/product/${product._id}`}
@@ -150,7 +151,15 @@ const Home = () => {
                   >
                     Add To Cart
                   </button>
-                </div>
+                </div>):
+                ( <div className="flex items-center justify-between gap-1">
+                   <Link
+                    to={`/product/${product._id}`}
+                    className="w-full text-center mt-4 bg-green-600 text-white py-2 rounded-lg font-medium hover:bg-green-700 transition"
+                  >
+                    View Details
+                  </Link>
+                 </ div>)}
               </div>
             </div>
           ))}

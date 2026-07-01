@@ -2,13 +2,13 @@ import axios from 'axios';
 
 
 const api = axios.create({
-  baseURL: ' https://e-kart-web.onrender.com/api',
+  baseURL: ' http://localhost:5000/api',
 });
 
 
 export default api
 
-//
+// https://e-kart-web.onrender.com/api
 // console.log("ayush")
 
 

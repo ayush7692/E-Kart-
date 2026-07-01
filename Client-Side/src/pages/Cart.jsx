@@ -1,8 +1,9 @@
 
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { decreaseItem, getCart, increaseItem, removeItem } from "../features/slice/cartSlice";
+import { clearCart, decreaseItem, getCart, increaseItem, removeItem } from "../features/slice/cartSlice";
 import { Link, useNavigate } from "react-router-dom";
+
 
 export default function Cart() {
 
@@ -11,7 +12,11 @@ export default function Cart() {
   const dispatch = useDispatch()
 
  const {cartItem} = useSelector(store=> store.cart)
+
   
+
+ const outOfStock= cartItem?.some((item)=>item?.qty > item?.product?.stock)
+
   const increaseQty = (_id)=>{
       dispatch(increaseItem(_id))
   }
@@ -89,10 +94,13 @@ export default function Cart() {
 
                       <button
                         onClick={() => increaseQty(item?.product?._id)}
+                        disabled={item?.qty > item?.product?.stock}
                         className="bg-blue-600 text-white px-3 py-1 rounded"
                       >
                         +
                       </button>
+                      
+                      {item?.qty > item?.product?.stock?<p className="text-red-500">insufficient Stock</p>:""}
                     </div>
                   </div>
 
@@ -137,11 +145,15 @@ export default function Cart() {
            {
             !cartItem?.length==0?(
               <button 
-           className="w-full mt-5 bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold" >
-             <Link to={'/checkOut'} >
+              disabled={outOfStock}
+              onClick={()=> navigate('/checkOut')}
+              className="w-full mt-5 bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold hover:cursor-pointer" >
+             
               Proceed to Checkout
-            </Link>
+            
            </button>
+
+           
             ):(
             <button 
              className="w-full mt-5 bg-red-400 hover:bg-red-600 text-white py-3 rounded-lg font-semibold hover:cursor-pointer" >
@@ -152,7 +164,9 @@ export default function Cart() {
             )
            }
           </div>
+
         </div>
+        
       </div>
     </div>
   );

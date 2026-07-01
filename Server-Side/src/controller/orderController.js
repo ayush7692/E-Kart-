@@ -42,15 +42,15 @@ const createOrder = async(req,res)=>{
         status:"placed"
  })
         await order.save()
-        await order.populate('products.product','name category')
-    res.status(200).json(order)
+        await order.populate('products.product','name image category')
+    res.status(200).json({message:"order created"})
 
 }
 const getMyOrder = async(req,res)=>{
     const userId = req.user._id
   
 
-    const order  = await Order.find({user:userId}).populate('user','name email phone').populate('address').populate('products.product','name category').sort({createdAt:-1})
+    const order  = await Order.find({user:userId}).populate('user','name email phone').populate('address').populate('products.product','name image category').sort({createdAt:-1})
     if(!order){
         res.status(400)
         throw new Error('no order found')

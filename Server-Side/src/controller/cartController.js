@@ -71,16 +71,18 @@ const addToCart = async(req,res)=>{
 const clearCart =  async(req,res)=>{
     const userId = req.user._id
     
-    const cart = await Cart.findOneAndDelete({user:userId})
+    const cart = await Cart.findOne({user:userId})
 
-    if(!cart){
+      if (!cart) {
         res.status(404)
-        throw new Error('cart is found')
+        throw new Error("Cart not found")
     }
-    
-    res.status(200).json({
-        message:"cart cleared"
-    })
+
+    cart.products = []
+    await cart.save()
+
+    res.status(200).json(cart)
+     
 }
 
 const increaseItem =  async(req,res)=>{
@@ -96,6 +98,7 @@ const increaseItem =  async(req,res)=>{
     }
 
     const productExist = await Product.findById(productId)
+    
     if(!productExist){
         res.status(400)
         throw new Error('product not available')
@@ -104,9 +107,10 @@ const increaseItem =  async(req,res)=>{
     let cartItem  = cart.products.find((item)=> item.product.toString()==productId)
 
        if(cartItem){
-        if(productExist.stock < cartItem +1 ){
+        if(productExist.stock < cartItem.qty ){
             res.status(409)
             throw new Error('insufficient stock')
+           
         }
 
          cartItem.qty += 1

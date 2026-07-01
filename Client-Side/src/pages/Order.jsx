@@ -14,7 +14,8 @@ export default function MyOrders() {
         dispatch(getOrders())
     },[])
 
-    
+      const defaultImage =
+    "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500";
   
         
 
@@ -66,10 +67,15 @@ export default function MyOrders() {
                     className="flex justify-between border-b py-3"
                   >
                     <div>
+                      <img src={item?.product?.image || defaultImage} alt="No Image" 
+                      className="w-20 h-20 object-cover rounded-md border-2 cursor-pointer border-blue-300"
+                      />
+                    </div>
+                    <div>
                       <h3 className="font-medium">
                         {item?.product?.name}
                       </h3>
-                      <p className="text-gray-500 text-sm">
+                      <p className="text-gray-500 text-sm text-center">
                         Qty: {item?.qty}
                       </p>
                     </div>
@@ -90,7 +96,7 @@ export default function MyOrders() {
 
                   <div className="flex gap-3">  
                       <Link to={'/'}  className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
-                        Buy Again
+                          View Detail
                       </Link>
                     
                   </div>

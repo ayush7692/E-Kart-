@@ -8,11 +8,18 @@ const initialState = {
     orderConfirmed:false,
     OrdererrorMessage:""
 }
-
+  console.log("ayu",initialState.orderConfirmed)
 const orderSlice = createSlice({
   name: "order",
   initialState,
-  reducers: {},
+  reducers: {
+    orderComplete:(state,action)=>{
+      return {
+        ...state,
+        orderConfirmed:false
+      }
+    }
+  },
   extraReducers:(builder)=>{
     builder
       .addCase(getOrders.pending, (state, action) => {
@@ -41,7 +48,7 @@ const orderSlice = createSlice({
   }
 });
 
-export const {} = orderSlice.actions
+export const {orderComplete} = orderSlice.actions
 
 export default orderSlice.reducer
 
@@ -54,6 +61,7 @@ export const getOrders = createAsyncThunk('GET/ORDERS',async(_,thunkAPI)=>{
                 authorization: `Bearer ${token}`
             }
         })
+          console.log(response?.data)
         return response?.data
         
         
@@ -73,6 +81,7 @@ export const createOrders = createAsyncThunk('CREATE/ORDERS',async(_,thunkAPI)=>
                 authorization: `Bearer ${token}`
             }
         })
+        console.log(response?.data)
         return response.data
         
         

@@ -13,6 +13,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import AddAddress from './pages/Address'
 import PrivateComponentVendor from './components/privateComponentVendor'
 import AddProduct from './pages/AddProduct'
+import Profile from './pages/Profile'
 
 function App() {
 
@@ -29,14 +30,16 @@ function App() {
               <Route path="/product/:pid" element={<ProductDetail />} />
               <Route path="/Register" element={<Register />} />
               <Route path="/Login" element={<Login/>} /> 
-              <Route element={<PrivateComponent/>}>
+              <Route  element={<PrivateComponent/>}>
+                  <Route path='/profile' element={<Profile/>}/>
                    <Route path="/cart" element={<Cart />} />
                    <Route path="/order" element={<MyOrders />} />
                    <Route path="/checkOut" element={<Checkout />} />
                    <Route path='/addAddress' element={<AddAddress/>} />
               </Route>
-              <Route element={<PrivateComponentVendor/>}>
-                    <Route path="/addProduct" element={<AddProduct/>} />
+              <Route path='/vendor' element={<PrivateComponentVendor/>}>
+                    <Route path="addProduct" element={<AddProduct/>} />
+                    <Route path='profile' element={<Profile/>}/>
               </Route>
             </Routes>
           </main>
